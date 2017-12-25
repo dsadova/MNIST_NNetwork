@@ -9,8 +9,8 @@ public:
 	NNetwork(int hidden, int epochs, double speed, double stop);
 
 	~NNetwork();
-	void Training(std::vector<std::vector <double>> DataSet, std::vector<double> DataLabels, const std::vector<std::vector <double>> TestSet, const std::vector<double> TestLabels);
-	double Accuracy(const std::vector<std::vector<double>>DataSet, const std::vector<double> TestLabels);
+	void TrainingAndLookingForAccuracy(std::vector<std::vector <double>> DataSet, std::vector<double> DataLabels, const std::vector<std::vector <double>> TestSet, const std::vector<double> TestLabels);
+	
 
 private:
 	const int m_Input = 28 * 28;
@@ -24,14 +24,15 @@ private:
 	int m_hidden = 200, m_epochs = 15;
 	double m_speed = 0.008, m_stop = 0.005;
 
+	double Accuracy(const std::vector<std::vector<double>>DataSet, const std::vector<double> TestLabels);
 	std::vector <double> PrepareDataAtFirstLayer;
 	std::vector <double> m_tmpOutput;
 
 	double hyperbTan(double x);
 	std::vector<double> softmax(std::vector<double> z);
 	std::vector<double> hGradient, oGradient;
-	void NewBias(std::vector <double> labels);
-	void NewWeights(std::vector <double> labels);
+	void NewBias();
+	void NewWeights();
 	void Gradient(std::vector <double> labels);
 	void Shuffle(std::vector <std::vector <double>> Dataset, std::vector <double> Labels);
 

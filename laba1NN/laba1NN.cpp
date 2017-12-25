@@ -15,16 +15,11 @@
 #include "ReadData.h"
 #include "NeutronNetwork.h"
 
-int main(int argc, char** argv[])
+int main(int argc, char* argv[])
 {
-	if (argc < 1) {
-		std::cout << "Number of arguments is not right. You should write: " << std::endl;
-		std::cout << "1: number of hidden neurons: " << std::endl;
-		std::cout << "2: number of epochs: " << std::endl;
-		std::cout << "3: speed: " << std::endl;
-		std::cout << "4: stop criterion: " << std::endl;
-		return 0;
-	}
+
+	std::cout << "You can write 1-4 arguments for network: " << std::endl;
+	std::cout << "number of hidden neurons, number of epochs, speed, stop criterion" << std::endl;
 
 
 	std::string trainImageMNIST = "train-images.idx3-ubyte";
@@ -35,7 +30,7 @@ int main(int argc, char** argv[])
 	int NumberOfImages = 60000;
 	int ImageSize = 28 * 28;
 
-	
+
 
 	std::vector<std::vector<double>> DataSet;
 	std::vector<double> DataLabels;
@@ -48,22 +43,42 @@ int main(int argc, char** argv[])
 	rd.ReadMnistData(testImageMNIST, TestSet);
 	rd.ReadMnistLabels(testLabelsMNIST, TestLabels);
 
-	int Hidden = 300;	
+	int Hidden = 300;
 	int NumberOfEpochs = 15;
 	double Speed = 0.01;
 	double StopCriterion = 0.005;
-	if (argc > 1) {
-		Hidden = atoi(*argv[1]);
-		NumberOfEpochs = atoi(*argv[2]);
-		Speed = atof(*argv[3]);
-		StopCriterion = atof(*argv[4]);
+	switch (argc){
+	case 1:
+		std::cout << "number of hidden neurons = 300, number of epochs = 15, speed = 0.01, stop criterion = 0.005" << std::endl;
+		break;
+	case 2:
+		Hidden = atoi(argv[1]);
+		break;
+	case 3:
+		Hidden = atoi(argv[1]);
+		NumberOfEpochs = atoi(argv[2]);
+		break;
+	case 4:
+		Hidden = atoi(argv[1]);
+		NumberOfEpochs = atoi(argv[2]);
+		Speed = atof(argv[3]);
+		break;
+	case 5:
+		Hidden = atoi(argv[1]);
+		NumberOfEpochs = atoi(argv[2]);
+		Speed = atof(argv[3]);
+		StopCriterion = atof(argv[4]);
+		break;
+	default:
+		Hidden = atoi(argv[1]);
+		NumberOfEpochs = atoi(argv[2]);
+		Speed = atof(argv[3]);
+		StopCriterion = atof(argv[4]);
+		break;
 	}
+
 	NNetwork net(Hidden, NumberOfEpochs, Speed, StopCriterion);
-	net.Training(DataSet, DataLabels, TestSet, TestLabels);
-	
-	/*double trainingAccuracy = net.Accuracy(DataSet, DataLabels);
-	double testAccuracy = net.Accuracy(TestSet, TestLabels);
-	std::cout << "Accuracy of training set: " << trainingAccuracy << "Accuracy of test set: " << testAccuracy << std::endl;*/
+	net.TrainingAndLookingForAccuracy(DataSet, DataLabels, TestSet, TestLabels);
+
 	return 0;
 }
-
