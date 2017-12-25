@@ -13,11 +13,11 @@ NNetwork::NNetwork(int hidden, int epochs, double speed, double stop)
 
 
 	hiddenWeights.resize(m_Input);
-	for (int i = 0; i != hiddenWeights.size(); i++)
+	for (size_t i = 0; i < hiddenWeights.size(); i++)
 		hiddenWeights[i].resize(m_hidden);
 
 	outputWeights.resize(m_hidden);
-	for (int i = 0; i != outputWeights.size(); i++) {
+	for (size_t i = 0; i < outputWeights.size(); i++) {
 		outputWeights[i].resize(m_Output);
 	}
 
@@ -104,7 +104,7 @@ int NNetwork::Max(std::vector<double> vec) {
 
 	int num = 0;
 	double tmp = vec[0];
-	for (int j = 0; j != vec.size(); j++)
+	for (size_t j = 0; j < vec.size(); j++)
 		if (vec[j] > tmp - 0.0001){
 			tmp = vec[j];
 			num = j;
@@ -171,10 +171,10 @@ std::vector<double> NNetwork::InputForHiddenLayer(std::vector<double> hiddenInpu
 }
 
 void NNetwork::Gradient(std::vector <double> labels) {
-	for (int i = 0; i != oGradient.size(); i++)
+	for (size_t i = 0; i < oGradient.size(); i++)
 		oGradient[i] = (labels[i] - m_tmpOutput[i]);
 
-	for (int i = 0; i != hGradient.size(); i++) {
+	for (size_t i = 0; i < hGradient.size(); i++) {
 		double derivative = (1 - PrepareDataAtFirstLayer[i]) * (1 + PrepareDataAtFirstLayer[i]);
 		double sum = 0.0;
 		for (int j = 0; j < m_Output; j++) {
@@ -253,26 +253,26 @@ void NNetwork::TrainingAndLookingForAccuracy(std::vector<std::vector <double>> D
 
 void NNetwork::NewBias()
 {
-	for (int i = 0; i != m_b1.size(); i++) 
+	for (size_t i = 0; i < m_b1.size(); i++) 
 		m_b1[i] += m_speed * hGradient[i] * 1.0;
 
-	for (int i = 0; i != m_b2.size(); i++)
+	for (size_t i = 0; i < m_b2.size(); i++)
 		m_b2[i] += m_speed * oGradient[i] * 1.0;
 }
 
 void NNetwork::NewWeights() {
-	for (int i = 0; i != hiddenWeights.size(); ++i)
-		for (int j = 0; j != hiddenWeights[0].size(); ++j)
+	for (size_t i = 0; i < hiddenWeights.size(); ++i)
+		for (size_t j = 0; j < hiddenWeights[0].size(); ++j)
 			hiddenWeights[i][j] += (m_speed * hGradient[j]) * inputFirstLayer.first[i];
 
-	for (int i = 0; i != outputWeights.size(); ++i)
-		for (int j = 0; j != outputWeights[0].size(); ++j)
+	for (size_t i = 0; i < outputWeights.size(); ++i)
+		for (size_t j = 0; j < outputWeights[0].size(); ++j)
 			outputWeights[i][j] += m_speed * oGradient[j] * PrepareDataAtFirstLayer[i];
 }
 
 void NNetwork::Shuffle(std::vector <std::vector <double>> Dataset, std::vector <double> Labels)
 {
-	for (int i = 0; i != Dataset.size(); i++)
+	for (size_t i = 0; i < Dataset.size(); i++)
 	{
 		int nom1 = rand() % Dataset.size();
 		int nom2 = rand() % Dataset.size();
